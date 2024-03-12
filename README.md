@@ -5,7 +5,13 @@
 
 This is a project work for the Deep Learning course at [AIT](https://www.ait-budapest.com/).
 
-This project uses the [gtzan](https://www.kaggle.com/datasets/andradaolteanu/gtzan-dataset-music-genre-classification) dataset to train a model and predict the genre of a given audio file. Our work consists of 3 parts, first we process the data and create features for the model. In the second part, we train a model and optimize its parameters. Finally, we evaluate the model and try to optimize the model further.  
+This project uses the [gtzan](https://huggingface.co/datasets/marsyas/gtzan) dataset to train a model and predict the genre of a given audio file. Our work consists of 3 parts:
+
+1. processing the data and extracting features for the model
+2. create, train and evaluate the model
+3. enhancing the model (hyperparameter optimization and trying out different model types and techniques)
+
+We expect the model to be able to predict the genres to an acceptable level. 
 
 ---
 
@@ -18,14 +24,7 @@ To download required modules using [*conda*](https://docs.conda.io/projects/cond
 ```bash
     pip install -r requirements.txt
 ```
-
-To update requirements using *conda* or *pip*:
-```bash
-    conda list --export > requirements.txt
-```
-```bash
-    pip freeze > requirements.txt
-```
+The data is automatically loaded from [huggingface](https://huggingface.co/).
 
 ---
 
