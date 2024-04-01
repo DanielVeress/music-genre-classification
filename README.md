@@ -1,5 +1,5 @@
 # Music Genre Classification Based on Audio
-### by Boton Rimmel & Dániel Veress
+### by Botond Rimmel & Dániel Veress
 
 #
 
