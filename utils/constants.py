@@ -1,0 +1,3 @@
+DATA_DIR = 'data'
+
+SEED=1234
