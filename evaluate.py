@@ -22,7 +22,7 @@ def plot_history(history, figsize=(16, 6)):
     return fig
 
 
-def evaluate_predictions(Y_true, Y_pred, genre_list):
+def evaluate_predictions(Y_true, Y_pred, genre_list, normalize=None, text_size=10):
     '''Evaluates predictions based on many metrics'''
 
     print(f'Accuracy: {accuracy_score(Y_true, Y_pred):0.2%}')
@@ -30,18 +30,19 @@ def evaluate_predictions(Y_true, Y_pred, genre_list):
     print(f'Recall: {recall_score(Y_true, Y_pred, average="macro"):0.2%}')
     print(f'F1: {f1_score(Y_true, Y_pred, average="macro")}')
     
-    conf = confusion_matrix(Y_true, Y_pred, normalize='all')
+    # confusion matrix
+    conf = confusion_matrix(Y_true, Y_pred, normalize=normalize)
+    genres = len(genre_list)
+    
     fig, ax = plt.subplots()
     ax.matshow(conf)
-    
-    genres = len(genre_list)
     ax.set_xticks(np.arange(genres), labels=genre_list)
     ax.set_yticks(np.arange(genres), labels=genre_list)
-    
+    # setting labels on plot
     for i in range(genres):
         for j in range(genres):
-            text = ax.text(j, i, np.ceil(conf[i, j],3), ha="center", va="center", color="w", size=8)
-    
+            text = ax.text(j, i, conf[i, j], ha="center", va="center", color="w", size=text_size)
+
     plt.title('Confusion Matrix for Classes')
     plt.show() 
     return fig 

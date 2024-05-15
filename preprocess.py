@@ -10,6 +10,7 @@ def segment_audio_data(audio_data, segment_num):
     
     Returns: an array with tuples, where the tuple consists of the start and end of the segment
     '''
+
     segment_size = audio_data.shape[0]//segment_num
 
     segment_ranges = []
@@ -21,7 +22,7 @@ def segment_audio_data(audio_data, segment_num):
 
 
 def visualize_audio_segments(audio, sr, segment_ranges):
-    plt.figure(figsize=(15, 5))
+    fig = plt.figure(figsize=(15, 5))
 
     # Plot the entire audio waveform
     plt.subplot(2, 1, 1)
@@ -38,9 +39,10 @@ def visualize_audio_segments(audio, sr, segment_ranges):
     plt.title('Audio Segments')
     plt.tight_layout()
     plt.show()
+    return fig
 
 
-def get_features(y, segment_ranges):
+def get_features(y, sr, segment_ranges):
     '''
     Extracts features from a segment of the audio data
     Examples of features: MFCC, tempo, spectral centroid, etc.
@@ -117,3 +119,32 @@ def split_data(X, Y, split_precentages:dict):
 
     return X_train, X_valid, X_test, Y_train, Y_valid, Y_test
 
+
+def scale(X_train, X_valid, X_test):
+    '''Scales the values by the maximum value'''
+
+    maximum = X_train.max()
+    X_train = X_train/maximum
+    X_valid = X_valid/maximum
+    X_test = X_test/maximum
+
+    return X_train.astype(np.float32), X_valid.astype(np.float32), X_test.astype(np.float32)
+
+
+def unroll_sequence(X, Y):
+    '''
+    Creates unrolled data from segmented/sequenced data.
+    Y value (genre) is repeated for each segment.
+    '''
+    
+    if X.ndim != 3:
+        raise ValueError(f'X only has {X.ndim} dimensions, while 3 were expected')
+
+    row_num = X.shape[0]
+    segment_num = X.shape[1]
+    feature_num = X.shape[2]
+    
+    X_unrolled = X.reshape(row_num*segment_num, feature_num)
+    Y_unrolled = np.repeat(Y, segment_num, axis=0)
+
+    return X_unrolled, Y_unrolled
