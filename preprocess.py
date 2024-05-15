@@ -6,35 +6,54 @@ import librosa
 
 def segment_audio_data(audio_data, segment_num):
     '''
-    Gets the segments ranges
+    Gets the segment ranges
     
-    Returns: an array with tuples, where the tuple consists of the start and end of the segment
+    Parameters:
+    - audio_data: audio data that has been loaded in with librosa
+    - segment_num: the number of segments for the audio to be split up
+
+    Returns: a list of tuples, where a tuple consists of the start and end of the segment
     '''
 
     segment_size = audio_data.shape[0]//segment_num
 
     segment_ranges = []
     for i in range(segment_num):
-        segment_ranges.append((i*segment_size, (i+1)*segment_size))
+        segment_start = i*segment_size
+        segment_end = (i+1)*segment_size
+        segment_ranges.append((segment_start, segment_end))
     segment_ranges[-1] = (segment_ranges[-1][0], audio_data.shape[0]+1)
     
     return segment_ranges
 
 
 def visualize_audio_segments(audio, sr, segment_ranges):
+    '''
+    Plots the segments in the audio
+    
+    Parameters:
+    - audio: audio data that has been loaded in with librosa
+    - sr: sample rate of the audio
+    - segment_ranges: the segment ranges returned by the segment_audio_data function
+    
+    Returns:
+    created figure
+    '''
+
     fig = plt.figure(figsize=(15, 5))
 
-    # Plot the entire audio waveform
+    # plot the entire audio waveform
     plt.subplot(2, 1, 1)
     librosa.display.waveshow(audio, sr=sr, color='b')
     plt.title('Original Audio')
 
-    # Plot each segment in a different color
+    # plot each segment in a different color
     plt.subplot(2, 1, 2)
-    librosa.display.waveshow(audio, sr=sr, alpha=0.5, color='b')  # Plot the entire audio as a background
+    librosa.display.waveshow(audio, sr=sr, alpha=0.5, color='b') 
 
+    # highlight each segment
     for start, end in segment_ranges:
-        plt.axvspan(start/sr, end/sr, color='r', alpha=0.3)  # Highlight each segment
+        plt.axvspan(start/sr, end/sr, color='r', alpha=0.3)  
 
     plt.title('Audio Segments')
     plt.tight_layout()
@@ -46,6 +65,14 @@ def get_features(y, sr, segment_ranges):
     '''
     Extracts features from a segment of the audio data
     Examples of features: MFCC, tempo, spectral centroid, etc.
+
+    Parameters:
+    - y: audio data that has been loaded in with librosa
+    - sr: sample rate of the audio
+    - segment_ranges: the segment ranges returned by the segment_audio_data function
+    
+    Returns:
+    a dataframe with all the features as columns
     '''
     df = pd.DataFrame()
 
@@ -102,7 +129,16 @@ def get_features(y, sr, segment_ranges):
 
 
 def split_data(X, Y, split_precentages:dict):
-    '''Splits data into train, validation and test sets'''
+    '''
+    Splits data into train, validation and test sets
+    
+    Parameters:
+    - X: the data
+    - Y: the labels
+    - split_precentages: the split precentages in a dictionary
+
+    Returns: (X_train, X_valid, X_train, Y_train, Y_valid, Y_test)
+    '''
 
     if sum(split_precentages.values()) != 1.0:
         raise ValueError('split precenteges together do not give 1.0!')

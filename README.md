@@ -16,11 +16,15 @@ We train and test many different models, from simple Logistic Regression model t
 
 ## Setting up the environment
 
+Python version used: 3.11.8
+
 To download required modules using [*conda*](https://docs.conda.io/projects/conda/en/stable/user-guide/getting-started.html) or *pip*:
 ```bash
     conda create --name <env_name> --file conda_requirements.txt
 ```
 ```bash
+    python3 -m venv env
+    source env/bin/activate
     pip install -r requirements.txt
 ```
 The data is automatically loaded from [huggingface](https://huggingface.co/).
